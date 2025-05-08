@@ -3,8 +3,8 @@ const { roomService } = require('./room.service');
 // Crear una nueva habitación
 const createRoom = async (req, res) => {
   try {
-    const { hotelId, roomNumber, floor, capacity, features } = req.body;
-    const newRoom = await roomService.create({ hotelId, roomNumber, floor, capacity, features });
+    const data = req.body;
+    const newRoom = await roomService.create(data);
     res.status(201).json(newRoom);
   } catch (error) {
     res.status(500).json({ message: 'Error creating room', error });
@@ -14,34 +14,22 @@ const createRoom = async (req, res) => {
 // Obtener todas las habitaciones
 const getAllRooms = async (req, res) => {
   try {
-    const rooms = await roomService.getAll();
+    const filters = req.query;
+    const rooms = await roomService.getAll(filters);
     res.json(rooms);
   } catch (error) {
     res.status(500).json({ message: 'Error retrieving rooms', error });
   }
 };
 
-// Obtener habitación por ID
-const getRoomById = async (req, res) => {
-  try {
-    const { id } = req.params;
-    const room = await roomService.getById(Number(id));
-    if (room) {
-      res.json(room);
-    } else {
-      res.status(404).json({ message: 'Room not found' });
-    }
-  } catch (error) {
-    res.status(500).json({ message: 'Error retrieving room', error });
-  }
-};
+
 
 // Actualizar habitación por ID
 const updateRoom = async (req, res) => {
   try {
     const { id } = req.params;
-    const { roomNumber, floor, capacity, features } = req.body;
-    const updatedRoom = await roomService.update(Number(id), { roomNumber, floor, capacity, features });
+    const data = req.body;
+    const updatedRoom = await roomService.update(Number(id), data);
     if (updatedRoom) {
       res.json(updatedRoom);
     } else {
@@ -67,15 +55,5 @@ const deleteRoom = async (req, res) => {
   }
 };
 
-// Filtrar habitaciones por hotel
-const getRoomByHotel = async (req, res) => {
-  try {
-    const { hotelId } = req.query;
-    const rooms = await roomService.getByHotel(Number(hotelId));
-    res.json(rooms);
-  } catch (error) {
-    res.status(500).json({ message: 'Error retrieving rooms by hotel', error });
-  }
-};
 
-export { createRoom, getAllRooms, getRoomById, updateRoom, deleteRoom, getRoomByHotel };
+export { createRoom, getAllRooms, updateRoom, deleteRoom };

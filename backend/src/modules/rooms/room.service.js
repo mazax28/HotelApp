@@ -76,17 +76,7 @@ const getAll = async (filters = {}) => {
 };
 
 
-// Para obtener habitaciones por hotel
-const getByHotel = async (hotelId) => {
-  return await prisma.room.findMany({
-    where: {
-      hotelId
-    },
-    include: {
-      hotel: true
-    }
-  });
-};
+
 
 // para actualizar una habitacion
 const update = async (id, data) => {
@@ -112,11 +102,7 @@ const update = async (id, data) => {
 };
 ;
 
-/**
- * Delete room
- * @param {number} id - Room ID
- * @returns {Promise<Object|null>} Deleted room or null if not found
- */
+
 const deleteRoom = async (id) => {
   try {
     return await prisma.room.delete({
@@ -135,7 +121,6 @@ const roomService = {
   getAll,
   update,
   delete: deleteRoom,
-  getByHotel
 };
 
-module.exports = { roomService };
+export { roomService };

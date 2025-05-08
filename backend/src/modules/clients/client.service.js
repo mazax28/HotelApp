@@ -41,4 +41,4 @@ const clientService = {
   getAll,
 };
 
-module.exports = { clientService };
+export { clientService };

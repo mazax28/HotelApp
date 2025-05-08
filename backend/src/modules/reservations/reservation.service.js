@@ -68,4 +68,4 @@ const reservationService = {
   getAll,
 };
 
-module.exports = { reservationService };
+export { reservationService };

@@ -55,4 +55,4 @@ const hotelService = {
   delete: deleteHotel
 };
 
-module.exports = { hotelService };
+export { hotelService };

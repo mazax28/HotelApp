@@ -3,8 +3,8 @@ const { hotelService } = require('./hotel.service');
 // Crear un nuevo hotel
 const createHotel = async (req, res) => {
   try {
-    const { name, address } = req.body;
-    const newHotel = await hotelService.create({ name, address });
+    const data = req.body;
+    const newHotel = await hotelService.create(data);
     res.status(201).json(newHotel);
   } catch (error) {
     res.status(500).json({ message: 'Error creating hotel', error });
@@ -21,27 +21,13 @@ const getAllHotels = async (req, res) => {
   }
 };
 
-// Obtener un hotel específico
-const getHotelById = async (req, res) => {
-  try {
-    const { id } = req.params;
-    const hotel = await hotelService.getById(Number(id));
-    if (hotel) {
-      res.json(hotel);
-    } else {
-      res.status(404).json({ message: 'Hotel not found' });
-    }
-  } catch (error) {
-    res.status(500).json({ message: 'Error retrieving hotel', error });
-  }
-};
 
 // Actualizar un hotel
 const updateHotel = async (req, res) => {
   try {
     const { id } = req.params;
-    const { name, address } = req.body;
-    const updatedHotel = await hotelService.update(Number(id), { name, address });
+    const data = req.body;
+    const updatedHotel = await hotelService.update(Number(id), data);
     if (updatedHotel) {
       res.json(updatedHotel);
     } else {
@@ -67,4 +53,4 @@ const deleteHotel = async (req, res) => {
   }
 };
 
-export { createHotel, getAllHotels, getHotelById, updateHotel, deleteHotel };
+export { createHotel, getAllHotels, updateHotel, deleteHotel };

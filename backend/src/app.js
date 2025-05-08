@@ -9,7 +9,7 @@ import {reservationRoutes} from './modules/reservations/reservation.routes.js';
 
 const app = express();
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 8000;
 app.use(morgan('dev'));
 
 app.use(cors({

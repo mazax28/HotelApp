@@ -1,9 +1,9 @@
-const { PrismaClient } = require('@prisma/client');
-const prisma = new PrismaClient();
+import {prismaClient} from '../../utils/prisma.js'
+
 
 
 const create = async (data) => {
-  const { hotelId, roomId, clientId, checkInDate, checkOutDate, numberOfPeople } = data;
+  const { hotelId, roomId, clientId, checkInDate, checkOutDate, guestCount } = data;
   
   return await prisma.reservation.create({
     data: {

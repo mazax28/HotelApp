@@ -1,5 +1,4 @@
-const { clientService } = require('./client.service');
-
+import {clientService} from './client.service.js';
 // Crear un nuevo cliente
 const createClient = async (req, res) => {
   try {

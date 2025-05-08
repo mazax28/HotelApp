@@ -1,5 +1,5 @@
-const { PrismaClient } = require('@prisma/client');
-const prisma = new PrismaClient();
+import {prismaClient} from '../../utils/prisma.js'
+
 
 
 // creacion del hotel en el frontend

@@ -1,5 +1,4 @@
-const { hotelService } = require('./hotel.service');
-
+import { hotelService } from "./hotel.service.js";
 // Crear un nuevo hotel
 const createHotel = async (req, res) => {
   try {

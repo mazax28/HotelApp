@@ -1,14 +1,13 @@
-const { PrismaClient } = require('@prisma/client');
-const prisma = new PrismaClient();
+import {prismaClient} from '../../utils/prisma.js'
 
 const create = async (data) => {
-  const { document, name, surname } = data;
+  const { document, firstName, lastName } = data;
   
   return await prisma.client.create({
     data: {
       document,
-      firstName: name,      // Map name to firstName in schema
-      lastName: surname     // Map surname to lastName in schema
+      firstName,
+      lastName   
     }
   });
 };

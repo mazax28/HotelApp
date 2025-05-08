@@ -1,5 +1,4 @@
-const { reservationService } = require('./reservation.service');
-
+import { reservationService } from "./reservation.service.js";
 // Crear una nueva reserva
 const createReservation = async (req, res) => {
   try {

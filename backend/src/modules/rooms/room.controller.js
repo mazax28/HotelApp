@@ -1,4 +1,4 @@
-const { roomService } = require('./room.service');
+import { roomService } from "./room.service.js";
 
 // Crear una nueva habitación
 const createRoom = async (req, res) => {

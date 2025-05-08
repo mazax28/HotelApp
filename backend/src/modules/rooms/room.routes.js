@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { createRoom, getAllRooms, updateRoom, deleteRoom } from './room.controller';
+import { createRoom, getAllRooms, updateRoom, deleteRoom } from './room.controller.js';
 
 const router = Router();
 

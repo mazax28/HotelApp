@@ -1,4 +1,4 @@
-import {prismaClient} from '../../utils/prisma.js'
+import {prismaClient as prisma} from '../../utils/prisma.js'
 
 
 
@@ -12,7 +12,7 @@ const create = async (data) => {
       clientId: Number(clientId),
       checkInDate: new Date(checkInDate),
       checkOutDate: new Date(checkOutDate),
-      guestCount: Number(numberOfPeople) // Match schema field name
+      guestCount: Number(guestCount) // Match schema field name
     },
     include: {
       hotel: true,
@@ -23,7 +23,7 @@ const create = async (data) => {
 };
 
 // Listado de reservas con filtros
-const getAll = async (filters = {}) => {
+const getAll = async (filters) => {
   const { hotelId, checkInDate, checkOutDate, clientId } = filters;
   
   // Verificar parámetros obligatorios

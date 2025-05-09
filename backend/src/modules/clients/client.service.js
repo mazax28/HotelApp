@@ -1,6 +1,7 @@
-import {prismaClient} from '../../utils/prisma.js'
+import {prismaClient as prisma} from '../../utils/prisma.js'
 
 const create = async (data) => {
+  console.log(data);
   const { document, firstName, lastName } = data;
   
   return await prisma.client.create({

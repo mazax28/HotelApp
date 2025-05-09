@@ -17,7 +17,7 @@ const getAllReservations = async (req, res) => {
     const reservations = await reservationService.getAll(filters);
     res.json(reservations);
   } catch (error) {
-    res.status(500).json({ message: 'Error retrieving reservations', error });
+    res.status(500).json({ message: 'Error retrieving reservations', error:error.message || 'Ocurrio un error inesperado' });
   }
 };
 

@@ -3,6 +3,7 @@ import {clientService} from './client.service.js';
 const createClient = async (req, res) => {
   try {
     const data = req.body;
+    console.log(data);
     const newClient = await clientService.create(data);
     res.status(201).json(newClient);
   } catch (error) {

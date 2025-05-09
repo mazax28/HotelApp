@@ -4,10 +4,14 @@ import { roomService } from "./room.service.js";
 const createRoom = async (req, res) => {
   try {
     const data = req.body;
+    console.log(data);
     const newRoom = await roomService.create(data);
     res.status(201).json(newRoom);
   } catch (error) {
-    res.status(500).json({ message: 'Error creating room', error });
+    res.status(500).json({ 
+      message: 'Error creating room',
+      error: error.message || 'Ocurrio un error inesperado'
+     });
   }
 };
 
@@ -18,7 +22,10 @@ const getAllRooms = async (req, res) => {
     const rooms = await roomService.getAll(filters);
     res.json(rooms);
   } catch (error) {
-    res.status(500).json({ message: 'Error retrieving rooms', error });
+    res.status(500).json({ 
+      message: 'Error retrieving rooms', 
+      error: error.message || 'Ocurrio un error inesperado'
+     });
   }
 };
 

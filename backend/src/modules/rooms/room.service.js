@@ -1,4 +1,4 @@
-import {prismaClient} from '../../utils/prisma.js'
+import {prismaClient as prisma} from '../../utils/prisma.js'
 
 
 
@@ -6,11 +6,11 @@ import {prismaClient} from '../../utils/prisma.js'
 
 // creacion de una habitacion
 const create = async (data) => {
-  const { hotelId, roomNumber, floor, capacity, description, positionX = 0, positionY = 0 } = data;
+  const { hotelId, number, floor, capacity, description, positionX = 0, positionY = 0 } = data;
   
   return await prisma.room.create({
     data: {
-      number: roomNumber,
+      number: number,
       hotelId: Number(hotelId),
       floor,
       capacity: Number(capacity),
@@ -22,8 +22,11 @@ const create = async (data) => {
 };
 
 // Para la lista de habitaciones
-const getAll = async (filters = {}) => {
+const getAll = async (filters) => {
   const { checkInDate, checkOutDate, capacity } = filters;
+   if (!checkInDate || !checkOutDate) {
+    throw new Error('Las fechas de entrada y salida son requeridas');
+  }
   
   // Base query para habitaciones
   const query = {
@@ -44,10 +47,6 @@ const getAll = async (filters = {}) => {
   // Obtener todas las habitaciones según los filtros de capacidad
   const rooms = await prisma.room.findMany(query);
   
-  // Si no hay fechas, devolver todas las habitaciones
-  if (!checkInDate || !checkOutDate) {
-    return rooms;
-  }
   
   // Convertir fechas a objetos Date
   const startDate = new Date(checkInDate);
@@ -56,8 +55,7 @@ const getAll = async (filters = {}) => {
   // Buscar reservaciones que se traslapen con el periodo solicitado
   const reservations = await prisma.reservation.findMany({
     where: {
-      // Reservaciones que se traslapan con el rango de fechas solicitado
-      // (pero excluyendo aquellas cuya fecha de salida es igual a la fecha de entrada solicitada)
+     
       AND: [
         { checkOutDate: { gt: startDate } }, // La salida de la reserva es después de la entrada solicitada
         { checkInDate: { lt: endDate } }    // La entrada de la reserva es antes de la salida solicitada
@@ -80,12 +78,12 @@ const getAll = async (filters = {}) => {
 
 // para actualizar una habitacion
 const update = async (id, data) => {
-  const { roomNumber, floor, capacity, description, positionX, positionY } = data;
+  const { number, floor, capacity, description, positionX, positionY } = data;
   try {
     return await prisma.room.update({
       where: { id },
       data: {
-        number: roomNumber,
+        number: number,
         floor,
         capacity: Number(capacity),
         description,

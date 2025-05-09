@@ -1,4 +1,4 @@
-import {prismaClient} from '../../utils/prisma.js'
+import {prismaClient as prisma} from '../../utils/prisma.js'
 
 
 

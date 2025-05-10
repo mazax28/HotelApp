@@ -1,4 +1,4 @@
-import { reservationService } from "./reservation.service.js";
+import { reservationService } from './reservation.service.js';
 // Crear una nueva reserva
 const createReservation = async (req, res) => {
   try {
@@ -17,10 +17,34 @@ const getAllReservations = async (req, res) => {
     const reservations = await reservationService.getAll(filters);
     res.json(reservations);
   } catch (error) {
-    res.status(500).json({ message: 'Error retrieving reservations', error:error.message || 'Ocurrio un error inesperado' });
+    res
+      .status(500)
+      .json({
+        message: 'Error retrieving reservations',
+        error: error.message || 'Ocurrio un error inesperado',
+      });
   }
 };
 
+// Obtener el mapa de habitaciones por pisos
+const getRoomMapByFloor = async (req, res) => {
+  try {
+    const { hotelId, date } = req.query;
 
+    if (!hotelId) {
+      return res
+        .status(400)
+        .json({ message: 'El ID del hotel es obligatorio' });
+    }
 
-export { createReservation, getAllReservations};
+    const roomMap = await reservationService.getRoomMapByFloor(hotelId, date);
+    res.json(roomMap);
+  } catch (error) {
+    res.status(500).json({
+      message: 'Error al obtener el mapa de habitaciones',
+      error: error.message || 'Ocurrió un error inesperado',
+    });
+  }
+};
+
+export { createReservation, getAllReservations, getRoomMapByFloor };

@@ -1,16 +1,13 @@
 import axios from 'axios'; // o fetch, como prefieras
 axios.defaults.withCredentials = true; // Para enviar cookies con las peticiones
 
-const API_URL = 'http://localhost:8000/api/hotels';
+const API_URL = 'http://localhost:3000/api/hotels';
 
-
-const createHotel = async (hotelData) => {
+const createHotel = async hotelData => {
   try {
-   
-    
     const response = await axios.post(API_URL, {
       name: hotelData.name,
-      address: hotelData.address
+      address: hotelData.address,
     });
     return response.data;
   } catch (error) {
@@ -18,7 +15,6 @@ const createHotel = async (hotelData) => {
     throw error;
   }
 };
-
 
 const getAllHotels = async () => {
   try {
@@ -34,7 +30,7 @@ const updateHotel = async (id, hotelData) => {
   try {
     const response = await axios.put(`${API_URL}/${id}`, {
       name: hotelData.name,
-      address: hotelData.address
+      address: hotelData.address,
     });
     return response.data;
   } catch (error) {
@@ -43,8 +39,7 @@ const updateHotel = async (id, hotelData) => {
   }
 };
 
-
-const deleteHotel = async (id) => {
+const deleteHotel = async id => {
   try {
     const response = await axios.delete(`${API_URL}/${id}`);
     return response.data;
@@ -54,9 +49,4 @@ const deleteHotel = async (id) => {
   }
 };
 
-export {
-  createHotel,
-  getAllHotels,
-  updateHotel,
-  deleteHotel
-};
+export { createHotel, getAllHotels, updateHotel, deleteHotel };

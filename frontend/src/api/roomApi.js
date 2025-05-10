@@ -1,21 +1,18 @@
 import axios from 'axios'; // o fetch, como prefieras
 axios.defaults.withCredentials = true; // Para enviar cookies con las peticiones
 
-const API_URL = 'http://localhost:8000/api/rooms';
+const API_URL = 'http://localhost:3000/api/rooms';
 
-
-const createRoom = async (roomData) => {
+const createRoom = async roomData => {
   try {
-    
-    
-    const response = await axios.post(API_URL,{
-        hotelId: roomData.hotelId,
-        number: roomData.roomNumber, // string
-        floor: roomData.floor, // string
-        capacity: roomData.capacity,
-        description: roomData.description,
-        positionX: roomData.positionX || 0,
-        positionY: roomData.positionY || 0
+    const response = await axios.post(API_URL, {
+      hotelId: roomData.hotelId,
+      number: roomData.roomNumber, // string
+      floor: roomData.floor, // string
+      capacity: roomData.capacity,
+      description: roomData.description,
+      positionX: roomData.positionX || 0,
+      positionY: roomData.positionY || 0,
     });
     return response.data;
   } catch (error) {
@@ -24,9 +21,7 @@ const createRoom = async (roomData) => {
   }
 };
 
-
-const getAllRooms = async (filters) => {
-  
+const getAllRooms = async filters => {
   try {
     const { checkInDate, checkOutDate } = filters;
     if (!checkInDate || !checkOutDate) {
@@ -40,18 +35,15 @@ const getAllRooms = async (filters) => {
   }
 };
 
-
 const updateRoom = async (id, roomData) => {
   try {
-   
-    
-    const response = await axios.put(`${API_URL}/${id}`,{
-        number: roomData.roomNumber,
-        floor: roomData.floor,// string
-        capacity: roomData.capacity,
-        description: roomData.description,
-        positionX: roomData.positionX || 0,
-        positionY: roomData.positionY || 0
+    const response = await axios.put(`${API_URL}/${id}`, {
+      number: roomData.roomNumber,
+      floor: roomData.floor, // string
+      capacity: roomData.capacity,
+      description: roomData.description,
+      positionX: roomData.positionX || 0,
+      positionY: roomData.positionY || 0,
     });
     return response.data;
   } catch (error) {
@@ -60,8 +52,7 @@ const updateRoom = async (id, roomData) => {
   }
 };
 
-
-const deleteRoom = async (id) => {
+const deleteRoom = async id => {
   try {
     const response = await axios.delete(`${API_URL}/${id}`);
     return response.data;
@@ -71,9 +62,4 @@ const deleteRoom = async (id) => {
   }
 };
 
-export {
-  createRoom,
-  getAllRooms,
-  updateRoom,
-  deleteRoom
-};
+export { createRoom, getAllRooms, updateRoom, deleteRoom };

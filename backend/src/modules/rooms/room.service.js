@@ -1,13 +1,17 @@
-import {prismaClient as prisma} from '../../utils/prisma.js'
-
-
-
-
+import { prismaClient as prisma } from '../../utils/prisma.js';
 
 // creacion de una habitacion
-const create = async (data) => {
-  const { hotelId, number, floor, capacity, description, positionX = 0, positionY = 0 } = data;
-  
+const create = async data => {
+  const {
+    hotelId,
+    number,
+    floor,
+    capacity,
+    description,
+    positionX = 0,
+    positionY = 0,
+  } = data;
+
   return await prisma.room.create({
     data: {
       number: number,
@@ -16,65 +20,77 @@ const create = async (data) => {
       capacity: Number(capacity),
       description,
       positionX: Number(positionX),
-      positionY: Number(positionY)
-    }
+      positionY: Number(positionY),
+    },
   });
 };
 
 // Para la lista de habitaciones
-const getAll = async (filters) => {
-  const { checkInDate, checkOutDate, capacity } = filters;
-   if (!checkInDate || !checkOutDate) {
+const getAll = async filters => {
+  const { checkInDate, checkOutDate, capacity, hotelId } = filters;
+
+  if (!checkInDate || !checkOutDate) {
     throw new Error('Las fechas de entrada y salida son requeridas');
   }
-  
+
   // Base query para habitaciones
   const query = {
     include: {
-      hotel: true
-    }
+      hotel: true,
+    },
   };
-  
+
+  // Configurar los filtros de consulta
+  query.where = {};
+
+  // Filtrar por ID del hotel si se proporciona
+  if (hotelId) {
+    query.where.hotelId = Number(hotelId);
+  }
+
   // Filtro por capacidad si se proporciona
   if (capacity) {
-    query.where = {
-      capacity: {
-        gte: Number(capacity)
-      }
+    query.where.capacity = {
+      gte: Number(capacity),
     };
   }
-  
-  // Obtener todas las habitaciones según los filtros de capacidad
+
+  // Obtener todas las habitaciones según los filtros de capacidad y hotel
   const rooms = await prisma.room.findMany(query);
-  
-  
+
   // Convertir fechas a objetos Date
   const startDate = new Date(checkInDate);
   const endDate = new Date(checkOutDate);
-  
+
   // Buscar reservaciones que se traslapen con el periodo solicitado
+  // Nota importante: una habitación está disponible si:
+  // 1. No tiene reservaciones que se traslapen con el período solicitado, o
+  // 2. Su fecha de salida coincide con la fecha de entrada solicitada (ya que la habitación
+  //    queda disponible el mismo día de la salida para un nuevo ingreso)
   const reservations = await prisma.reservation.findMany({
     where: {
-     
       AND: [
         { checkOutDate: { gt: startDate } }, // La salida de la reserva es después de la entrada solicitada
-        { checkInDate: { lt: endDate } }    // La entrada de la reserva es antes de la salida solicitada
-      ]
+        { checkInDate: { lt: endDate } }, // La entrada de la reserva es antes de la salida solicitada
+        {
+          NOT: {
+            // Excluir las reservas cuya fecha de salida coincide exactamente con la fecha de entrada solicitada
+            checkOutDate: startDate,
+          },
+        },
+      ],
     },
     select: {
-      roomId: true
-    }
+      roomId: true,
+    },
   });
-  
+
   // Obtener IDs de habitaciones ocupadas
   const occupiedRoomIds = reservations.map(res => res.roomId);
-  
+
   // Filtrar habitaciones disponibles
   return rooms.filter(room => !occupiedRoomIds.includes(room.id));
 };
-
-
-
 
 // para actualizar una habitacion
 const update = async (id, data) => {
@@ -88,7 +104,7 @@ const update = async (id, data) => {
         capacity: Number(capacity),
         description,
         positionX: Number(positionX),
-        positionY: Number(positionY)
+        positionY: Number(positionY),
       },
     });
   } catch (error) {
@@ -98,10 +114,7 @@ const update = async (id, data) => {
     throw error;
   }
 };
-;
-
-
-const deleteRoom = async (id) => {
+const deleteRoom = async id => {
   try {
     return await prisma.room.delete({
       where: { id },
